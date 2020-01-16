@@ -153,7 +153,7 @@ def main():
     print("result loss: ", eval_res[0])
     print("result score: ", eval_res[1])
 
-
+    """
     # confusion matrix -----
     print("\nconfusion matrix")
     pred = model.predict_generator(test_generator,
@@ -190,7 +190,7 @@ def main():
     # 再現率 (recall):
     recall = tp/(tp+fn)
     print("Recall of the model is {}".format(recall))
-
+    """
 
 
 if __name__ == '__main__':
