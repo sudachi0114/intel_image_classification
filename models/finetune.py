@@ -113,6 +113,7 @@ def main():
 
     # あとで重みの解凍をできるように base_model を定義
     base_model = mh.buildMnv1Base()
+    # base_model = mh.buildMnv2Base()
     base_model.trainable=False
 
     model = mh.addChead(base_model)
