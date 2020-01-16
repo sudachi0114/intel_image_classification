@@ -5,7 +5,7 @@ import os, shutil
 cwd = os.getcwd()
 
 train_dir = os.path.join(cwd, "train")
-val_dir = os.path.join(cwd, "val")
+# val_dir = os.path.join(cwd, "val")
 
 class_list = os.listdir(train_dir)
 ignore_files = ['.DS_Store']
@@ -18,7 +18,7 @@ class_list = sorted(class_list)
 #   validation_sep = n  # int で設定
 # class0 の n 枚, class1 の m 枚 を validation に分け与える場合 (class で異なる)
 # validation_sep = [n, m]
-validation_sep = [150, 350]
+validation_sep = 200
 
 
 
@@ -91,16 +91,16 @@ def main():
         sub_red_train_list = sub_train_list[:sep]
         sub_inc_validation_list = sub_train_list[sep:]
         print("  => decreased train amount: ", len(sub_red_train_list))
-        print("  => increased validation amount: ", len(sub_inc_validation_list), " +8")
+        print("  => increased validation amount: ", len(sub_inc_validation_list))
 
         # file copy -----
         print("\n    !! execute distribution...\n" )
         copy(sub_train_dir, sub_red_train_list, sub_red_train_dir)
         copy(sub_train_dir, sub_inc_validation_list, sub_validation_dir)
-        # copy original_val data => validation
-        sub_val_dir = os.path.join(val_dir, cname)
-        sub_val_list = os.listdir(sub_val_dir)
-        copy(sub_val_dir, sub_val_list, sub_validation_dir)
+        # None!! copy original_val data => validation !!
+        # sub_val_dir = os.path.join(val_dir, cname)
+        # sub_val_list = os.listdir(sub_val_dir)
+        # copy(sub_val_dir, sub_val_list, sub_validation_dir)
 
 
 
@@ -117,5 +117,5 @@ def check():
 
 
 if __name__ == "__main__":
-    # main()
-    check()
+    main()
+    # check()
