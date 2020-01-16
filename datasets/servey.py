@@ -13,8 +13,8 @@ for fname in ignore_files:
         class_list.remove(fname)
 class_list = sorted(class_list)
 
-
-# validation_dir = os.path.join(cwd, "val")
+red_train_dir = os.path.join(cwd, "red_train")
+validation_dir = os.path.join(cwd, "validation")
 test_dir = os.path.join(cwd, "test")
 
 
@@ -29,6 +29,10 @@ def countAmount(dir_name):
 
 countAmount(train_dir)
 
-# countAmount(validation_dir)
+print("--+--"*10)
+
+countAmount(red_train_dir)
+
+countAmount(validation_dir)
 
 countAmount(test_dir)
