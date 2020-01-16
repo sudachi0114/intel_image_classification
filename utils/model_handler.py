@@ -141,7 +141,8 @@ class ModelHandler:
 
         if self.CLASS_MODE == 'categorical':
             model.add(GlobalAveragePooling2D())
-            model.add(Dense(2, activation='softmax'))
+            # model.add(Dense(2, activation='softmax'))
+            model.add(Dense(6, activation='softmax'))
         elif self.CLASS_MODE == 'binary':
             model.add(Flatten())
             model.add(Dense(256, activation='relu'))  # base_model に寄らない設計でいいのか??
@@ -167,7 +168,8 @@ class ModelHandler:
 
         if self.CLASS_MODE == 'categorical':
             model.add(GlobalAveragePooling2D())
-            model.add(Dense(2, activation='softmax'))
+            # model.add(Dense(2, activation='softmax'))
+            model.add(Dense(6, activation='softmax'))
         elif self.CLASS_MODE == 'binary':
             model.add(Flatten())
             model.add(Dense(256, activation='relu'))  # base_model に寄らない設計でいいのか??
