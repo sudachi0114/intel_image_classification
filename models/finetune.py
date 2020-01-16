@@ -1,19 +1,33 @@
 
-# 転移学習 - finetune
+# transfer learning with finetuning
 
 import os, sys
 sys.path.append(os.pardir)
-
 import time
+import numpy as np
+
+"""
 import tensorflow as tf
 config=tf.ConfigProto()
 config.gpu_options.allow_growth=True
 sess=tf.Session(config=config)
+"""
+
+import tensorflow as tf
+import keras
+from keras import backend as K
+config = tf.ConfigProto()
+config.gpu_options.per_process_gpu_memory_fraction=0.5
+sess = tf.Session(config=config)
+K.set_session(sess)
+print("TensorFlow version is ", tf.__version__)
+print("Keras version is ", keras.__version__)
 
 from keras.preprocessing.image import ImageDataGenerator
 from keras.callbacks import EarlyStopping
-#from utils.img_utils import inputDataCreator
+from sklearn.metrics import confusion_matrix
 from utils.model_handler import ModelHandler
+
 
 # define -----
 batch_size = 16
@@ -31,17 +45,36 @@ def main():
 
     data_dir = os.path.join(prj_root, "datasets")
 
-    # original train_data only or with_augmented data
+    # use original data (but make validation data by oneself) -----
+    train_dir = os.path.join(data_dir, "red_train")
+    validation_dir = os.path.join(data_dir, "validation")
+    test_dir = os.path.join(data_dir, "test")
+
+
+    """
+    use_da_data = False
+    increase_val = False
+    print( "\nmode: Use Augmented data: {} | increase validation data: {}".format(use_da_data, increase_val) )
+
+    # First define original train_data only as train_dir
     train_dir = os.path.join(data_dir, "train")
-    # train_dir = os.path.join(data_dir, "train_with_aug")
+    if (use_da_data == True) and (increase_val == False):
+        # with_augmented data (no validation increase)
+        train_dir = os.path.join(data_dir, "train_with_aug")
     validation_dir = os.path.join(data_dir, "val")  # original validation data
 
     # pair of decreaced train_data and increased validation data
-    # train_dir = os.path.join(data_dir, "red_train")
-    # train_dir = os.path.join(data_dir, "train_with_aug")
-    # validation_dir = os.path.join(data_dir, "validation")
+    if (increase_val == True):
+        train_dir = os.path.join(data_dir, "red_train")
+        if (use_da_data == True):
+            train_dir = os.path.join(data_dir, "red_train_with_aug")
+        validation_dir = os.path.join(data_dir, "validation")
 
     test_dir = os.path.join(data_dir, "test")
+
+    print("\ntrain_dir: ", train_dir)
+    print("validation_dir: ", validation_dir)
+    """
 
 
     # data load ----------
@@ -139,6 +172,46 @@ def main():
 
     print("result loss: ", eval_res[0])
     print("result score: ", eval_res[1])
+
+    """
+    # confusion matrix -----
+    print("\nconfusion matrix")
+    pred = model.predict_generator(test_generator,
+                                   steps=test_steps,
+                                   verbose=3)
+
+    test_label = []
+    for i in range(test_steps):
+        _, tmp_tl = next(test_generator)
+        if i == 0:
+            test_label = tmp_tl
+        else:
+            test_label = np.vstack((test_label, tmp_tl))    
+
+    idx_label = np.argmax(test_label, axis=-1)  # one_hot => normal
+    idx_pred = np.argmax(pred, axis=-1)  # 各 class の確率 => 最も高い値を持つ class
+    
+    cm = confusion_matrix(idx_label, idx_pred)
+
+    # Calculate Precision and Recall
+    tn, fp, fn, tp = cm.ravel()
+
+
+    print("  | T  | F ")
+    print("--+----+---")
+    print("N | {} | {}".format(tn, fn))
+    print("--+----+---")
+    print("P | {} | {}".format(tp, fp))
+
+    # 適合率 (precision):
+    precision = tp/(tp+fp)
+    print("Precision of the model is {}".format(precision))
+
+    # 再現率 (recall):
+    recall = tp/(tp+fn)
+    print("Recall of the model is {}".format(recall))
+    """
+
 
 
 if __name__ == '__main__':
