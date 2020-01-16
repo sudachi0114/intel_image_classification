@@ -47,6 +47,12 @@ def main():
 
     data_dir = os.path.join(prj_root, "datasets")
 
+    # use original data (but make validation data by oneself) -----
+    train_dir = os.path.join(data_dir, "red_train")
+    validation_dir = os.path.join(data_dir, "validation")
+    test_dir = os.path.join(data_dir, "test")
+
+    """
     use_da_data = False
     increase_val = False
     print( "\nmode: Use Augmented data: {} | increase validation data: {}".format(use_da_data, increase_val) )
@@ -69,6 +75,7 @@ def main():
 
     print("\ntrain_dir: ", train_dir)
     print("validation_dir: ", validation_dir)
+    """
 
 
     # data load ----------
