@@ -23,6 +23,7 @@ __pycache__
 
 # ignore utils
 format.py
+search.sh
 
 # old codes
 zzz_history/
