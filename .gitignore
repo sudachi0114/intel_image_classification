@@ -1,0 +1,28 @@
+
+# system file
+.DS_store
+.vscode
+*~
+__pycache__
+
+# logs
+*.log
+*model.json
+*model.h5
+*weights.h5
+*history.pkl
+*.png
+*old*
+*.csv
+
+# data
+*.zip
+*.jpg
+*.jpeg
+*.npz
+
+# ignore utils
+format.py
+
+# old codes
+zzz_history/
