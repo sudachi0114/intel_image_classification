@@ -47,8 +47,8 @@ class AugWithImgaug:
         self.INPUT_SIZE = input_size
         self.CHANNEL = channel
         self.DO_SHUFFLE = True
-        self.CLASS_MODE = 'binary'
-        self.CLASS_LIST = ['NORMAL', 'PNEUMONIA']
+        self.CLASS_MODE = 'categorical'
+        self.CLASS_LIST = ["buildings", "forest", "glacier", "mountain", "sea", "street"]
 
 
     def img2array(self, target_dir, input_size, normalize=False):
@@ -231,7 +231,7 @@ if __name__ == '__main__':
 
     # auger.display_imgaug(train_dir, 224, normalize=False, aug="plural")
 
-    mode = "train"  # "red_train"
+    mode = "red_train"  # "train"
     for i in range(2):
 
         if mode == "train":
