@@ -21,6 +21,7 @@ print("Keras version is ", keras.__version__)
 from keras.preprocessing.image import ImageDataGenerator
 from keras.callbacks import EarlyStopping
 from sklearn.metrics import confusion_matrix
+from sklearn.metrics import classification_report  # multi-classifer recall / precision
 from utils.model_handler import ModelHandler
 
 
