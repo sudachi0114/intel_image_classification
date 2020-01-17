@@ -5,18 +5,13 @@ import os, sys
 sys.path.append(os.pardir)
 import time
 import numpy as np
-
-"""
-import tensorflow as tf
-config=tf.ConfigProto()
-config.gpu_options.allow_growth=True
-sess=tf.Session(config=config)
-"""
+np.random.seed(114)
 
 import tensorflow as tf
 import keras
 from keras import backend as K
 config = tf.ConfigProto()
+# config.gpu_options.allow_growth=True
 config.gpu_options.per_process_gpu_memory_fraction=0.5
 sess = tf.Session(config=config)
 K.set_session(sess)
@@ -50,31 +45,25 @@ def main():
     validation_dir = os.path.join(data_dir, "validation")
     test_dir = os.path.join(data_dir, "test")
 
-
-    """
+    # use original data (but make validation data by oneself) -----
     use_da_data = False
-    increase_val = False
-    print( "\nmode: Use Augmented data: {} | increase validation data: {}".format(use_da_data, increase_val) )
 
-    # First define original train_data only as train_dir
-    train_dir = os.path.join(data_dir, "train")
-    if (use_da_data == True) and (increase_val == False):
-        # with_augmented data (no validation increase)
-        train_dir = os.path.join(data_dir, "train_with_aug")
-    validation_dir = os.path.join(data_dir, "val")  # original validation data
 
-    # pair of decreaced train_data and increased validation data
-    if (increase_val == True):
+    if use_da_data:
+        train_dir = os.path.join(data_dir, "red_train_with_aug")
+    else:
         train_dir = os.path.join(data_dir, "red_train")
-        if (use_da_data == True):
-            train_dir = os.path.join(data_dir, "red_train_with_aug")
-        validation_dir = os.path.join(data_dir, "validation")
-
+    validation_dir = os.path.join(data_dir, "validation")
     test_dir = os.path.join(data_dir, "test")
+
+    print( "\nmode: Use Augmented data: {}".format(use_da_data) )
+
 
     print("\ntrain_dir: ", train_dir)
     print("validation_dir: ", validation_dir)
-    """
+    print("test_dir: ", test_dir)
+
+
 
 
     # data load ----------
@@ -95,7 +84,7 @@ def main():
     test_generator = data_gen.flow_from_directory(test_dir,
                                                   target_size=target_size,
                                                   batch_size=batch_size,
-                                                  shuffle=True,
+                                                  shuffle=False,
                                                   class_mode='categorical')
 
     data_checker, label_checker = next(train_generator)
@@ -113,6 +102,8 @@ def main():
 
     # あとで重みの解凍をできるように base_model を定義
     base_model = mh.buildMnv1Base()
+    # base_model = mh.buildMnv2Base()
+    
     base_model.trainable=False
 
     model = mh.addChead(base_model)
@@ -131,7 +122,7 @@ def main():
     steps_per_epoch = train_generator.n // batch_size
     validation_steps = validation_generator.n // batch_size
     print(steps_per_epoch, " [steps / epoch]")
-    print(validation_steps, " (validation steps)")                
+    print(validation_steps, " (validation steps)")
 
     start = time.time()
     print("\ntraining sequence start .....")
