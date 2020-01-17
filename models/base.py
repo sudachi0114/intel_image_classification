@@ -28,6 +28,7 @@ print("Keras version is ", keras.__version__)
 from keras.preprocessing.image import ImageDataGenerator
 from keras.callbacks import EarlyStopping
 from sklearn.metrics import confusion_matrix
+from sklearn.metrics import classification_report  # multi-classifer recall / precision
 from utils.model_handler import ModelHandler
 
 
@@ -153,7 +154,7 @@ def main():
     print("result loss: ", eval_res[0])
     print("result score: ", eval_res[1])
 
-    """
+
     # confusion matrix -----
     print("\nconfusion matrix")
     pred = model.predict_generator(test_generator,
@@ -172,24 +173,25 @@ def main():
     idx_pred = np.argmax(pred, axis=-1)  # 各 class の確率 => 最も高い値を持つ class
     
     cm = confusion_matrix(idx_label, idx_pred)
+    print(cm)
 
     # Calculate Precision and Recall
-    tn, fp, fn, tp = cm.ravel()
+    print(classification_report(idx_label, idx_pred))
 
+    """
+    # get return in dict-type
+    print(classification_report(idx_label, idx_pred, output_dict=True))
 
-    print("  | T  | F ")
-    print("--+----+---")
-    print("N | {} | {}".format(tn, fn))
-    print("--+----+---")
-    print("P | {} | {}".format(tp, fp))
-
-    # 適合率 (precision):
-    precision = tp/(tp+fp)
-    print("Precision of the model is {}".format(precision))
-
-    # 再現率 (recall):
-    recall = tp/(tp+fn)
-    print("Recall of the model is {}".format(recall))
+    # get out evaluation report by each class ( with for scentence ) 
+    class_nums = list( set(idx_label) )  # the `number` of class
+    for cnum in class_nums:
+          print(cnum,
+                classification_report(idx_label, 
+                                      idx_pred,
+                                      output_dict=True)['{}'.format(cnum)]
+          )
+    # you can chose evaluate metrix by dict index like 
+    print(classification_report(idx_label, idx_pred, output_dict=True)['accuracy'])
     """
 
 
