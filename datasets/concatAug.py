@@ -2,7 +2,7 @@
 import os, shutil
 
 # train or red_train
-mode = "train"  # "red_train"
+mode = "red_train"  # "train"
 
 # define
 cwd = os.getcwd()
